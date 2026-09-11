@@ -44,7 +44,7 @@ function toast(text, type, duration) {
 function updateMenuProgress() {
   $('menu-stars').textContent = totalStars()+'/'+MAX_STARS;
   $('menu-score').textContent = totalScore();
-  $('menu-unlocked').textContent = LEVELS.length+'/'+LEVELS.length;
+  $('menu-unlocked').textContent = save.unlocked+'/'+LEVELS.length;
   $('hdr-stars').textContent = totalStars()+'/'+MAX_STARS;
   $('hdr-score').textContent = totalScore();
 }
@@ -198,11 +198,12 @@ function buildLevelCards() {
   const fragment = document.createDocumentFragment();
   for (let i=0;i<LEVELS.length;i++) {
     const lvl = LEVELS[i];
-    const unlocked = true;
+    const unlocked = i < save.unlocked;
     const completed = (save.stars[i]||0) > 0;
     const card = document.createElement('div');
     card.className = 'level-card';
-    if (completed) card.classList.add('completed');
+    if (!unlocked) card.classList.add('locked');
+    else if (completed) card.classList.add('completed');
     else card.classList.add('available');
     card.style.animationDelay = Math.min(i*15, 400) + 'ms';
     const stars = save.stars[i]||0;
@@ -219,10 +220,12 @@ function buildLevelCards() {
       '<div class="level-lock-icon">🔒</div>';
     const pv = card.querySelector('canvas');
     drawLevelPreview(pv, lvl, unlocked);
-    card.addEventListener('click', () => {
-      Eng.initAudio();
-      openLoadout(i);
-    });
+    if (unlocked) {
+      card.addEventListener('click', () => {
+        Eng.initAudio();
+        openLoadout(i);
+      });
+    }
     fragment.appendChild(card);
   }
   grid.appendChild(fragment);
@@ -329,7 +332,7 @@ $('btn-fullscreen-game').addEventListener('click', toggleFullscreen);
 $('btn-reset').addEventListener('click', () => {
   if (confirm('Удалить весь прогресс?')) {
     try { localStorage.removeItem(SAVE_KEY); } catch(e){}
-    save.unlocked = LEVELS.length;
+    save.unlocked = INITIAL_UNLOCKED;
     save.stars = {};
     save.best = {};
     updateMenuProgress();
@@ -365,7 +368,7 @@ $('import-input').addEventListener('change', (e) => {
     try {
       const data = JSON.parse(reader.result);
       if (typeof data !== 'object' || data === null) throw new Error('bad');
-      save.unlocked = LEVELS.length;
+      save.unlocked = Math.max(INITIAL_UNLOCKED, Math.min(LEVELS.length, data.unlocked || INITIAL_UNLOCKED));
       save.stars = data.stars || {};
       save.best = data.best || {};
       persist();
