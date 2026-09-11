@@ -44,7 +44,7 @@ function toast(text, type, duration) {
 function updateMenuProgress() {
   $('menu-stars').textContent = totalStars()+'/'+MAX_STARS;
   $('menu-score').textContent = totalScore();
-  $('menu-unlocked').textContent = save.unlocked+'/'+LEVELS.length;
+  $('menu-unlocked').textContent = LEVELS.length+'/'+LEVELS.length;
   $('hdr-stars').textContent = totalStars()+'/'+MAX_STARS;
   $('hdr-score').textContent = totalScore();
 }
@@ -198,12 +198,11 @@ function buildLevelCards() {
   const fragment = document.createDocumentFragment();
   for (let i=0;i<LEVELS.length;i++) {
     const lvl = LEVELS[i];
-    const unlocked = i < save.unlocked;
+    const unlocked = true;
     const completed = (save.stars[i]||0) > 0;
     const card = document.createElement('div');
     card.className = 'level-card';
-    if (!unlocked) card.classList.add('locked');
-    else if (completed) card.classList.add('completed');
+    if (completed) card.classList.add('completed');
     else card.classList.add('available');
     card.style.animationDelay = Math.min(i*15, 400) + 'ms';
     const stars = save.stars[i]||0;
@@ -220,15 +219,14 @@ function buildLevelCards() {
       '<div class="level-lock-icon">🔒</div>';
     const pv = card.querySelector('canvas');
     drawLevelPreview(pv, lvl, unlocked);
-    if (unlocked) {
-      card.addEventListener('click', () => {
-        Eng.initAudio();
-        openLoadout(i);
-      });
-    }
+    card.addEventListener('click', () => {
+      Eng.initAudio();
+      openLoadout(i);
+    });
     fragment.appendChild(card);
   }
   grid.appendChild(fragment);
+  levelsScreen.scrollTop = 0;
 }
 
 function buildLoadoutTowerCards() {
@@ -331,7 +329,7 @@ $('btn-fullscreen-game').addEventListener('click', toggleFullscreen);
 $('btn-reset').addEventListener('click', () => {
   if (confirm('Удалить весь прогресс?')) {
     try { localStorage.removeItem(SAVE_KEY); } catch(e){}
-    save.unlocked = INITIAL_UNLOCKED;
+    save.unlocked = LEVELS.length;
     save.stars = {};
     save.best = {};
     updateMenuProgress();
@@ -367,7 +365,7 @@ $('import-input').addEventListener('change', (e) => {
     try {
       const data = JSON.parse(reader.result);
       if (typeof data !== 'object' || data === null) throw new Error('bad');
-      save.unlocked = Math.max(INITIAL_UNLOCKED, Math.min(LEVELS.length, data.unlocked || INITIAL_UNLOCKED));
+      save.unlocked = LEVELS.length;
       save.stars = data.stars || {};
       save.best = data.best || {};
       persist();
