@@ -1,8 +1,9 @@
-const CACHE = 'td-v4';
+const CACHE = 'td-v5';
 const ASSETS = [
   './', './index.html', './style.css',
   './config.js', './engine.js', './main.js',
-  './manifest.json', './icon.svg'
+  './manifest.json', './icon.svg',
+  './icon-192.png', './icon-512.png'
 ];
 
 self.addEventListener('install', e => {
