@@ -1,5 +1,5 @@
-export const SAVE_KEY = 'td_save_v5';
-export const INITIAL_UNLOCKED = 5;
+export const SAVE_KEY = 'td_save_v6';
+export const INITIAL_UNLOCKED = 50;
 export const MAX_PICKS = 4;
 export const TILE = 46;
 export const COLS = 20;
