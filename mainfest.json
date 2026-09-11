@@ -1,0 +1,17 @@
+{
+  "name": "Tower Defense: Last Stand",
+  "short_name": "Tower Defense",
+  "description": "Защита базы от 50 волн на 50 уровнях",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
+  "lang": "ru",
+  "categories": ["games"],
+  "icons": [
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"},
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable"}
+  ]
+}
