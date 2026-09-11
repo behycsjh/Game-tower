@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "Com.gametowerah.towerh",
+        "sha256_cert_fingerprints": ["04:5B:6C:DD:ED:B0:A8:7A:58:6A:67:6A:EE:EC:08:76:80:8C:52:CE:80:6E:6A:B6:C8:9C:B8:5E:18:A7:2D:FE"]
+      }
+    }]
