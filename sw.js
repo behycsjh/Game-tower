@@ -1,4 +1,4 @@
-const CACHE = 'td-v5';
+const CACHE = 'td-v6';
 const ASSETS = [
   './', './index.html', './style.css',
   './config.js', './engine.js', './main.js',
